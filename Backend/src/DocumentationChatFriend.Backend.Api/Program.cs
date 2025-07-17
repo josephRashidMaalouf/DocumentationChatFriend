@@ -22,9 +22,8 @@ string qdrantConnectionString =
 builder.Services.AddScoped<QdrantClient>(sp => new QdrantClient(qdrantConnectionString));
 builder.Services.AddScoped<IVectorRepository, QDrantRepository>();
 
-//TODO: Update so that the right connection string is chosen based on env
-builder.Services.AddChatClient(new OllamaApiClient(new Uri("http://localhost:11434")));
-
+//TODO: make sure the correct connectionstring is selected based on env
+builder.Services.AddTransient<IOllamaApiClient, OllamaApiClient>(sp => new OllamaApiClient("http://localhost:11434"));
 
 var app = builder.Build();
 
