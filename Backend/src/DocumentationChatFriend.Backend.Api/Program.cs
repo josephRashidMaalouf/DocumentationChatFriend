@@ -1,6 +1,8 @@
+using DocumentationChatFriend.Backend.Api.Configs;
 using DocumentationChatFriend.Backend.Api.Helpers;
 using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Infrastructure.Persistance.Qdrant;
+using DocumentationChatFriend.Backend.Infrastructure.TypedClients;
 using OllamaSharp;
 using Qdrant.Client;
 
@@ -25,6 +27,9 @@ builder.Services.AddScoped<IVectorRepository, QDrantRepository>();
 
 //TODO: make sure the correct connectionstring is selected based on env
 builder.Services.AddTransient<IOllamaApiClient, OllamaApiClient>(sp => new OllamaApiClient("http://localhost:11434"));
+
+builder.Services.AddHttpClient<IChatAdapter, OllamaClient>();
+builder.Services.AddTransient<IOllamaClientConfigs, OllamaClientConfigs>();
 
 var app = builder.Build();
 
