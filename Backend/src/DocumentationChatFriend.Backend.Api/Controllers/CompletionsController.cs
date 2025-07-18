@@ -9,15 +9,15 @@ namespace DocumentationChatFriend.Backend.Api.Controllers;
 [Route("completions")]
 public class CompletionsController : ControllerBase
 {
-    private readonly IChatAdapter _chatAdapter;
+    private readonly IRagService _ragService;
 
-    public CompletionsController(IChatAdapter chatAdapter)
+    public CompletionsController(IRagService ragService)
     {
-        _chatAdapter = chatAdapter;
+        _ragService = ragService;
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostQuestion(string question)
+    public async Task<IActionResult> PostQuestion([FromBody]string question)
     {
         //IOllamaApiClient ollama = new OllamaApiClient(new Uri("http://localhost:11434"));
 
@@ -26,8 +26,8 @@ public class CompletionsController : ControllerBase
 
         //return Ok(embedding);
 
-        var response = await _chatAdapter.GenerateAsync(question);
+        var response = await _ragService.AnswerQuestionAsync(question);
 
-        return Ok(response?.Response);
+        return Ok(response);
     }
 }

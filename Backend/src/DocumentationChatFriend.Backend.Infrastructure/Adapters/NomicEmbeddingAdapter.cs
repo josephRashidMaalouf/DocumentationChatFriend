@@ -2,7 +2,7 @@
 using DocumentationChatFriend.Backend.Domain.Models;
 using OllamaSharp;
 
-namespace DocumentationChatFriend.Backend.Infrastructure.Services;
+namespace DocumentationChatFriend.Backend.Infrastructure.Adapters;
 
 public class NomicEmbeddingAdapter : IEmbeddingAdapter
 {

@@ -4,5 +4,5 @@ namespace DocumentationChatFriend.Backend.Domain.Interfaces;
 
 public interface IChatAdapter
 {
-    Task<GenerationResponse?> GenerateAsync(string prompt);
+    Task<GenerationResponse?> GenerateAsync(string question);
 }

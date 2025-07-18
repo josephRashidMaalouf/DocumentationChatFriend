@@ -1,6 +1,8 @@
 using DocumentationChatFriend.Backend.Api.Configs;
 using DocumentationChatFriend.Backend.Api.Helpers;
+using DocumentationChatFriend.Backend.Application.Services;
 using DocumentationChatFriend.Backend.Domain.Interfaces;
+using DocumentationChatFriend.Backend.Infrastructure.Adapters;
 using DocumentationChatFriend.Backend.Infrastructure.Persistance.Qdrant;
 using DocumentationChatFriend.Backend.Infrastructure.TypedClients;
 using OllamaSharp;
@@ -22,7 +24,7 @@ string qdrantConnectionString =
         env == "Development" ? "QDrantLocal" : ""),
         nameof(qdrantConnectionString));
 
-builder.Services.AddScoped<QdrantClient>(sp => new QdrantClient(qdrantConnectionString));
+builder.Services.AddScoped<QdrantClient>(sp => new QdrantClient("localhost", 6334));
 builder.Services.AddScoped<IVectorRepository, QDrantRepository>();
 
 //TODO: make sure the correct connectionstring is selected based on env
@@ -30,6 +32,9 @@ builder.Services.AddTransient<IOllamaApiClient, OllamaApiClient>(sp => new Ollam
 
 builder.Services.AddHttpClient<IChatAdapter, OllamaClient>();
 builder.Services.AddTransient<IOllamaClientConfigs, OllamaClientConfigs>();
+builder.Services.AddScoped<IEmbeddingAdapter, NomicEmbeddingAdapter>();
+builder.Services.AddScoped<IRagService, RagService>();
+
 
 var app = builder.Build();
 
