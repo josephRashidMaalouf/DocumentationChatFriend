@@ -12,6 +12,7 @@ public class OllamaClientConfigs : IOllamaClientConfigs
         var ollamaSection = _configuration.GetSection("OllamaClientConfigs");
 
         Model = ConfigHelper.MustBeSet(ollamaSection["Model"], "OllamaConfigs:Model");
+        MaxTokens = ConfigHelper.MustBeSet<int>(ollamaSection["MaxTokens"], "OllamaConfigs:MaxTokens");
 
     }
 
