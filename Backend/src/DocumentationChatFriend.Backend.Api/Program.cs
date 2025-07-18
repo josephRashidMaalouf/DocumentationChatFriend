@@ -1,3 +1,4 @@
+using DocumentationChatFriend.Backend.Api.Helpers;
 using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Infrastructure.Persistance.Qdrant;
 using OllamaSharp;
@@ -15,7 +16,7 @@ builder.Services.AddOpenApi();
 
 //TODO: Adjust this when docker env is introduced
 string qdrantConnectionString =
-    MustBeSet(builder.Configuration.GetConnectionString(
+    ConfigHelper.MustBeSet(builder.Configuration.GetConnectionString(
         env == "Development" ? "QDrantLocal" : ""),
         nameof(qdrantConnectionString));
 
@@ -41,12 +42,3 @@ app.MapControllers();
 
 app.Run();
 
-string MustBeSet(string? str, string varName)
-{
-    if(string.IsNullOrWhiteSpace(str))
-    {
-        throw new InvalidOperationException($"{varName} must be set in appsettings.json");
-    }
-
-    return str;
-}

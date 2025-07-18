@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36301.6 d17.14
+VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentationChatFriend.Backend.Application", "Backend\src\DocumentationChatFriend.Backend.Application\DocumentationChatFriend.Backend.Application.csproj", "{0744AC6B-AE54-4211-8E35-61F2B989FDF8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentationChatFriend.Backend.Infrastructure", "Backend\src\DocumentationChatFriend.Backend.Infrastructure\DocumentationChatFriend.Backend.Infrastructure.csproj", "{3BBB533B-A2BC-4D29-85DD-66FE681358BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2F2EE813-96FB-4B89-8CBB-AE570DA26E2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentationChatFriend.Backend.Tests", "Backend\tests\DocumentationChatFriend.Backend.Tests\DocumentationChatFriend.Backend.Tests.csproj", "{205F7EF1-4AAC-4940-A5F0-62178648D0FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,10 @@ Global
 		{3BBB533B-A2BC-4D29-85DD-66FE681358BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BBB533B-A2BC-4D29-85DD-66FE681358BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BBB533B-A2BC-4D29-85DD-66FE681358BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{205F7EF1-4AAC-4940-A5F0-62178648D0FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{205F7EF1-4AAC-4940-A5F0-62178648D0FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{205F7EF1-4AAC-4940-A5F0-62178648D0FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{205F7EF1-4AAC-4940-A5F0-62178648D0FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +55,8 @@ Global
 		{2EC9DB3E-571C-4C15-9209-B32D08411D4B} = {411380B8-1630-41C1-8BEA-BCBB5A6A3C01}
 		{0744AC6B-AE54-4211-8E35-61F2B989FDF8} = {411380B8-1630-41C1-8BEA-BCBB5A6A3C01}
 		{3BBB533B-A2BC-4D29-85DD-66FE681358BC} = {411380B8-1630-41C1-8BEA-BCBB5A6A3C01}
+		{2F2EE813-96FB-4B89-8CBB-AE570DA26E2B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{205F7EF1-4AAC-4940-A5F0-62178648D0FF} = {2F2EE813-96FB-4B89-8CBB-AE570DA26E2B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CBBB1E4D-7C3F-4B9B-B65B-8A93072BEBA8}

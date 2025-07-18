@@ -8,9 +8,11 @@ public class OllamaClient : IChatAdapter
     private readonly HttpClient _httpClient;
     private readonly string _url;
 
-    public OllamaClient(HttpClient httpClient)
+    public OllamaClient(HttpClient httpClient, string url)
     {
         _httpClient = httpClient;
+        _url = url;
+        _httpClient.BaseAddress = new Uri(_url);
     }
 
     public Task<GenerationResponse> GenerateAsync(string prompt)
@@ -18,3 +20,5 @@ public class OllamaClient : IChatAdapter
         throw new NotImplementedException();
     }
 }
+
+//file record OllamaGenerateRequest(string Model = )
