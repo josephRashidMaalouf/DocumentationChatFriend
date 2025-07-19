@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.AI;
 using OllamaSharp;
+using ResultPatternJoeget.Errors;
+using ResultPatternJoeget.Results;
 
 namespace DocumentationChatFriend.Backend.Api.Controllers;
 
@@ -17,17 +19,20 @@ public class CompletionsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostQuestion([FromBody]string question)
+    public async Task<IActionResult> PostQuestion([FromBody]PostQuestionDto dto)
     {
-        //IOllamaApiClient ollama = new OllamaApiClient(new Uri("http://localhost:11434"));
+        var result = await _ragService.AnswerQuestionAsync(dto.Question, dto.CollectionName);
 
-        //ollama.SelectedModel = "nomic-embed-text";
-        //var embedding = await ollama.EmbedAsync(question);
+        if (result is ErrorResult error)
+        {
+            if (error.Errors.Any(x => x.GetType() is NotFoundError))
+            {
+                return x
+            }
+        }
 
-        //return Ok(embedding);
-
-        var response = await _ragService.AnswerQuestionAsync(question);
-
-        return Ok(response);
+        return Ok(result);
     }
 }
+
+public record PostQuestionDto(string Question, string CollectionName);

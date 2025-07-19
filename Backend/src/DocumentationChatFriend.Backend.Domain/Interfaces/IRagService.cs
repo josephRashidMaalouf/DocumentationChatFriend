@@ -1,8 +1,19 @@
-﻿using ResultPatternJoeget.Results;
+﻿using DocumentationChatFriend.Backend.Domain.Models;
+using ResultPatternJoeget.Errors;
+using ResultPatternJoeget.Results;
 
 namespace DocumentationChatFriend.Backend.Domain.Interfaces;
 
 public interface IRagService
 {
-    Task<Result> AnswerQuestionAsync(string  question);
+    /// <summary>
+    /// Asynchronously processes a question and returns an answer.
+    /// </summary>
+    /// <param name="question">The question to be answered. Cannot be null or empty.</param>
+    /// <param name="collectionName">The name of the collection to search for the answer. Cannot be null or empty.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a <see cref="Result"/> indicating the status of the operation.
+    /// If successful the result will be of type <see cref="SuccessResult{T}"/> where T is a string containing the answer to the question. If the operation fails the
+    /// result will be of type <see cref="ErrorResult"/> with a list of <see cref="Error"/> explaining why the operation failed.
+    /// </returns>
+    Task<Result> AnswerQuestionAsync(string  question, string collectionName);
 }

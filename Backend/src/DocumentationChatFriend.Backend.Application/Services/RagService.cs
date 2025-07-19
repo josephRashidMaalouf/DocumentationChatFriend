@@ -1,4 +1,5 @@
 ﻿using DocumentationChatFriend.Backend.Domain.Interfaces;
+using DocumentationChatFriend.Backend.Domain.Models;
 using ResultPatternJoeget.Results;
 
 namespace DocumentationChatFriend.Backend.Application.Services;
@@ -16,15 +17,36 @@ public class RagService : IRagService
         _vectorRepository = vectorRepository;
     }
 
-    public async Task<Result> AnswerQuestionAsync(string question)
+    public async Task<Result> AnswerQuestionAsync(string question, string collectionName)
     {
-        var embedding = await _embedding.EmbedTextAsync(question);
-        var result = await _vectorRepository.QueryAsync("dog-facts", embedding.Embedding.ToArray());
+        var embeddingResult = await _embedding.EmbedTextAsync(question);
 
-        var facts = string.Join("\n", result);
+        if (embeddingResult is not SuccessResult<EmbeddedResponse> embeddingSuccess)
+        {
+            return embeddingResult;
+        }
 
-        var answer = await _chatAdapter.GenerateAsync($"Facts: {facts} \nQuestion: {question}");
+        var queryResult = await _vectorRepository.QueryAsync(collectionName, embeddingSuccess.Data.Embedding.ToArray());
 
-        return answer.Response;
+        if (queryResult is not SuccessResult<List<string>> querySuccess)
+        {
+            return queryResult;
+        }
+
+        if (!querySuccess.Data.Any())
+        {
+            return new SuccessResult<string>("I don't have the facts to answer your question.");
+        }
+
+        var facts = string.Join("\n", querySuccess.Data);
+
+        var answerResult = await _chatAdapter.GenerateAsync($"Facts: {facts} \n\nQuestion: {question}");
+
+        if (answerResult is not SuccessResult<GenerationResponse> answerSuccess)
+        {
+            return answerResult;
+        }
+
+        return new SuccessResult<string>(answerSuccess.Data.Response);
     }
 }
