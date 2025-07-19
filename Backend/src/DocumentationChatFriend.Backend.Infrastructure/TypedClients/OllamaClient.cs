@@ -2,7 +2,6 @@
 using System.Text.Json;
 using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Domain.Models;
-using ResultPatternJoeget.Errors;
 using ResultPatternJoeget.Results;
 
 namespace DocumentationChatFriend.Backend.Infrastructure.TypedClients;
@@ -10,7 +9,7 @@ namespace DocumentationChatFriend.Backend.Infrastructure.TypedClients;
 public class OllamaClient : IChatAdapter
 {
     private readonly HttpClient _httpClient;
-    IOllamaClientConfigs _config;
+    private readonly IOllamaClientConfigs _config;
     private string _systemPrompt;
 
     public OllamaClient(HttpClient httpClient, IOllamaClientConfigs config)
@@ -24,8 +23,8 @@ public class OllamaClient : IChatAdapter
                                                 You will be given a list of facts and a question.
                                                 Answer the question using only the provided facts.
                                                 Do not use external knowledge.
-                                                If the answer can be clearly derived from the facts, provide the answer followed by a brief explanation.
-                                                If the answer cannot be determined from the facts alone, reply with: "Cannot answer based on the given facts."
+                                                If the answer can be clearly derived from the facts, provide the answer followed by an explanation.
+                                                Remember that the person asking you will not be aware that you are provided with a list of facts."
                                                 """ + "\n\n";
     }
 
@@ -45,33 +44,32 @@ public class OllamaClient : IChatAdapter
 
             if (!result.IsSuccessStatusCode)
             {
-                return new ErrorResult(
-                    new ThirdPartyError($"The request to the Ollama API failed. Status code: {result.StatusCode}"));
+                return new InternalErrorResult(
+                    $"The request to the Ollama API failed. Status code: {result.StatusCode}");
             }
 
             var generationResponse = await result.Content.ReadFromJsonAsync<GenerationResponse>();
 
             if (generationResponse is null)
             {
-                return new ErrorResult(new ThirdPartyError("Ollama API returned no data."));
+                return new InternalErrorResult("Ollama API returned no data.");
             }
 
             return new SuccessResult<GenerationResponse>(generationResponse);
         }
         catch (OperationCanceledException ex)
         {
-            return new ErrorResult(new TimeoutError("Could not process the request to the Ollama API."));
+            return new InternalErrorResult($"Could not process the request to the Ollama API: {ex.Message}");
         }
         catch (JsonException ex)
         {
-            return new ErrorResult(
-                new InternalError("Encountered an error while trying to deserialize the response from the Ollama API"));
+            return new InternalErrorResult(
+                $"Encountered an error while trying to deserialize the response from the Ollama API: {ex.Message}");
         }
         catch (Exception ex)
         {
-            return new ErrorResult(
-                new ThirdPartyError(
-                    "Something unexpected happened while trying to process the request to the Ollama API"));
+            return new InternalErrorResult(
+                $"Something unexpected happened while trying to process the request to the Ollama API: {ex.Message}");
         }
     }
 }
@@ -80,5 +78,5 @@ file record OllamaGenerateRequest(
     string Model, 
     string Prompt, 
     int MaxTokens = 512, 
-    double Temperature = 0.6, 
+    double Temperature = 0.9, 
     bool Stream = false);

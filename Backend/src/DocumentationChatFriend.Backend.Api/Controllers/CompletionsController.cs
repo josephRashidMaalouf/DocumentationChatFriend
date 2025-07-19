@@ -1,8 +1,5 @@
 ﻿using DocumentationChatFriend.Backend.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.AI;
-using OllamaSharp;
-using ResultPatternJoeget.Errors;
 using ResultPatternJoeget.Results;
 
 namespace DocumentationChatFriend.Backend.Api.Controllers;
@@ -23,15 +20,17 @@ public class CompletionsController : ControllerBase
     {
         var result = await _ragService.AnswerQuestionAsync(dto.Question, dto.CollectionName);
 
-        if (result is ErrorResult error)
+        if (result is NotFoundErrorResult notFound)
         {
-            if (error.Errors.Any(x => x.GetType() is NotFoundError))
-            {
-                return x
-            }
+            return NotFound(notFound.Reason);
         }
 
-        return Ok(result);
+        if (result is not SuccessResult<string> success)
+        {
+            return StatusCode(503);
+        }
+
+        return Ok(success.Data);
     }
 }
 

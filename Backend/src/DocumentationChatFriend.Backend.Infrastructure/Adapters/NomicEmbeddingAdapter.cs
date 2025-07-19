@@ -1,7 +1,6 @@
 ﻿using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Domain.Models;
 using OllamaSharp;
-using ResultPatternJoeget.Errors;
 using ResultPatternJoeget.Results;
 
 namespace DocumentationChatFriend.Backend.Infrastructure.Adapters;
@@ -30,8 +29,8 @@ public class NomicEmbeddingAdapter : IEmbeddingAdapter
         }
         catch(Exception ex)
         {
-            return new ErrorResult(
-                new ThirdPartyError($"Could not embed text: {text} because the OllamaApiClient could not be reached"));
+            return new InternalErrorResult(
+                "Could not embed text: {text} because the OllamaApiClient could not be reached");
         }
         
     }

@@ -2,7 +2,6 @@
 using DocumentationChatFriend.Backend.Domain.Models;
 using Qdrant.Client;
 using Qdrant.Client.Grpc;
-using ResultPatternJoeget.Errors;
 using ResultPatternJoeget.Results;
 
 namespace DocumentationChatFriend.Backend.Infrastructure.Persistance.Qdrant;
@@ -57,7 +56,7 @@ public class QDrantRepository : IVectorRepository
         }
         catch (Exception ex)
         {
-            return new ErrorResult(new ThirdPartyError($"Could not perform an upsert to collection: {collectionName}"));
+            return new InternalErrorResult($"Could not perform an upsert to collection: {collectionName}");
         }
 
     }
@@ -69,8 +68,7 @@ public class QDrantRepository : IVectorRepository
             var collectionExists = await _client.CollectionExistsAsync(collectionName);
             if (!collectionExists)
             {
-                return new ErrorResult(
-                    new NotFoundError($"No collection with the name {collectionName} exists in the database"));
+                return new NotFoundErrorResult($"No collection with the name {collectionName} exists in the database");
             }
 
 
@@ -88,8 +86,7 @@ public class QDrantRepository : IVectorRepository
         }
         catch (Exception ex)
         {
-            return new ErrorResult(
-                new ThirdPartyError($"Could not query the collection: {collectionName} in the database"));
+            return new InternalErrorResult($"Could not query the collection: {collectionName} in the database");
         }
     }
 }

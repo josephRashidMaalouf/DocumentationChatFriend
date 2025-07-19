@@ -38,7 +38,7 @@ public class RagService : IRagService
             return new SuccessResult<string>("I don't have the facts to answer your question.");
         }
 
-        var facts = string.Join("\n", querySuccess.Data);
+        var facts = string.Join("\n\n\n-", querySuccess.Data);
 
         var answerResult = await _chatAdapter.GenerateAsync($"Facts: {facts} \n\nQuestion: {question}");
 
