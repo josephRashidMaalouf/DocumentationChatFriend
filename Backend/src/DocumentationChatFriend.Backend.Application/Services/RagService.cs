@@ -1,4 +1,5 @@
 ﻿using DocumentationChatFriend.Backend.Domain.Interfaces;
+using ResultPatternJoeget.Results;
 
 namespace DocumentationChatFriend.Backend.Application.Services;
 
@@ -15,7 +16,7 @@ public class RagService : IRagService
         _vectorRepository = vectorRepository;
     }
 
-    public async Task<string> AnswerQuestionAsync(string question)
+    public async Task<Result> AnswerQuestionAsync(string question)
     {
         var embedding = await _embedding.EmbedTextAsync(question);
         var result = await _vectorRepository.QueryAsync("dog-facts", embedding.Embedding.ToArray());
