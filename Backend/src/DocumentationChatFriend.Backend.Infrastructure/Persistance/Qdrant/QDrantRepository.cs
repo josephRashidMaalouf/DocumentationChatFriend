@@ -60,8 +60,8 @@ public class QDrantRepository : IVectorRepository
         }
 
     }
-
-    public async Task<Result> QueryAsync(string collectionName, float[] vector, ulong limit = 3, float minScore = (float)0.6)
+    //TODO: Make sure the limit and min score are configurable from the controller
+    public async Task<Result> QueryAsync(string collectionName, float[] vector, ulong limit = 5, float minScore = (float)0.7)
     {
         try
         {

@@ -1,6 +1,4 @@
 ﻿using DocumentationChatFriend.Backend.Application.ChunkingStyles;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Utilities;
-using System.Runtime.Intrinsics.Arm;
 
 namespace DocumentationChatFriend.Backend.Tests.ChunkingStyles;
 

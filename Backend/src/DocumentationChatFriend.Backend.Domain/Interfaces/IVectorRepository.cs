@@ -29,5 +29,5 @@ public interface IVectorRepository
     /// Else the type will be an <see cref="ErrorResult"/> of type <see cref="NotFoundErrorResult"/> if the collectionName does not exist in the database,
     /// or an <see cref="InternalErrorResult"/>
     /// </returns>
-    Task<Result> QueryAsync(string collectionName, float[] vector, ulong limit = 3, float minScore = (float)0.6);
+    Task<Result> QueryAsync(string collectionName, float[] vector, ulong limit = 5, float minScore = (float)0.6);
 }

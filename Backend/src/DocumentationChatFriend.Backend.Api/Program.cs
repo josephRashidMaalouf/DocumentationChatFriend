@@ -34,6 +34,7 @@ builder.Services.AddHttpClient<IChatAdapter, OllamaClient>();
 builder.Services.AddTransient<IOllamaClientConfigs, OllamaClientConfigs>();
 builder.Services.AddScoped<IEmbeddingAdapter, NomicEmbeddingAdapter>();
 builder.Services.AddScoped<IRagService, RagService>();
+builder.Services.AddScoped<ITextUploadService, TextUploadService>();
 
 
 var app = builder.Build();

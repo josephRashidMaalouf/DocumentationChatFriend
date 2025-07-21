@@ -5,7 +5,7 @@ using ResultPatternJoeget.Results;
 namespace DocumentationChatFriend.Backend.Api.Controllers;
 
 [ApiController]
-[Route("completions")]
+[Route("api/completions")]
 public class CompletionsController : ControllerBase
 {
     private readonly IRagService _ragService;
