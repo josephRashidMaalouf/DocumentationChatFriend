@@ -27,8 +27,15 @@ public class CustomChunkingTests
         4,
         2,
         "One two three four five six seven eight nine ten eleven twelve",
-        new List<string> {"One two three four", "three four five six", "five six seven eight", "seven eight nine ten", "nine ten eleven twelve" }
-    }
+        new List<string> {"One two three four", "three four five six", "five six seven eight", "seven eight nine ten", "nine ten eleven twelve" },
+        },
+        new object[]
+        {
+            4,
+            1,
+            "One two three four five six seven eight nine ten eleven twelve",
+            new List<string> {"One two three four", "four five six seven", "seven eight nine ten", "ten eleven twelve" }
+        }
     };
 
     [Theory]

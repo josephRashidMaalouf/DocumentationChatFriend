@@ -24,9 +24,9 @@ public class CustomChunking : IChunkingStyle
     {
         _chunkLength = chunkLength;
         _overlap = overlap;
-        if (chunkLength < 1 || chunkLength < overlap || overlap < 0)
+        if (chunkLength < 1 || chunkLength <= overlap || overlap < 0)
         {
-            throw new ChunkingException("Invalid chunking parameters: chunkLength must be >= 1, overlap must be >= 0, and chunkLength must be >= overlap.");
+            throw new ChunkingException("Invalid chunking parameters: chunkLength must be >= 1, overlap must be >= 0, and chunkLength must be > overlap.");
         }
     }
 
@@ -37,17 +37,27 @@ public class CustomChunking : IChunkingStyle
 
         var chunks = new List<string>();
 
-        for (int i = 0; i < words.Length;)
+        int currentIndex = 0;
+        while (currentIndex < words.Length)
         {
-            string chunk = string.Empty;
-            for (int j = 0; j < _chunkLength;)
+            List<string> toBeCurrentChunk = [];
+            for (int i = 0;
+                 i < _chunkLength && currentIndex + i < words.Length;
+                 i++)
             {
-                chunk += words[i] + ' ';
-                j++;
-                i += j - _overlap;
+                toBeCurrentChunk.Add(words[currentIndex + i]);
             }
-            chunks.Add(chunk.Trim());
+
+            if (toBeCurrentChunk.Any())
+            {
+                string chunk = string.Join(' ', toBeCurrentChunk);
+                chunks.Add(chunk);
+            }
+
+            currentIndex += _chunkLength - _overlap;
         }
+
         return chunks;
+
     }
 }
