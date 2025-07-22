@@ -1,5 +1,4 @@
 using DocumentationChatFriend.Backend.Api.Configs;
-using DocumentationChatFriend.Backend.Api.Helpers;
 using DocumentationChatFriend.Backend.Application.Services;
 using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Infrastructure.Adapters;
@@ -18,11 +17,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-//TODO: Adjust this when docker env is introduced
-string qdrantConnectionString =
-    ConfigHelper.MustBeSet(builder.Configuration.GetConnectionString(
-        env == "Development" ? "QDrantLocal" : ""),
-        nameof(qdrantConnectionString));
+
 
 builder.Services.AddScoped<QdrantClient>(sp => new QdrantClient("localhost", 6334));
 builder.Services.AddScoped<IVectorRepository, QDrantRepository>();
@@ -31,7 +26,10 @@ builder.Services.AddScoped<IVectorRepository, QDrantRepository>();
 builder.Services.AddTransient<IOllamaApiClient, OllamaApiClient>(sp => new OllamaApiClient("http://localhost:11434"));
 
 builder.Services.AddHttpClient<IChatAdapter, OllamaClient>();
+
 builder.Services.AddTransient<IOllamaClientConfigs, OllamaClientConfigs>();
+builder.Services.AddTransient<IVectorRepositoryConfigs, VectorRepositoryConfigs>();
+
 builder.Services.AddScoped<IEmbeddingAdapter, NomicEmbeddingAdapter>();
 builder.Services.AddScoped<IRagService, RagService>();
 builder.Services.AddScoped<ITextUploadService, TextUploadService>();

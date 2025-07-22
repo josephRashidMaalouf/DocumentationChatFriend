@@ -23,7 +23,7 @@ public class OllamaClient : IChatAdapter
                                                 You will be given a list of facts and a question.
                                                 Answer the question using only the provided facts.
                                                 Do not use external knowledge.
-                                                If the answer can be clearly derived from the facts, provide the answer followed by an explanation.
+                                                If the answer can be clearly derived from the facts, provide the answer in a full sentence response.
                                                 Remember that the person asking you will not be aware that you are provided with a list of facts."
                                                 """ + "\n\n";
     }

@@ -22,12 +22,10 @@ public interface IVectorRepository
     /// <param name="collectionName">The name of the collection to query. Cannot be null or empty.</param>
     /// <param name="vector">The vector used to find matching items. Must not be null and should have a valid length as expected by the
     /// collection.</param>
-    /// <param name="limit">The maximum number of results to return. Defaults to 3.</param>
-    /// <param name="minScore">The minimum score threshold for results to be considered a match. Defaults to 0.6.</param>
     /// <returns>A task representing the asynchronous operation, containing a <see cref="Result"/> that indicates success or failure of the operation.
     /// If successful the result will be of type <see cref="SuccessResult{T}"/> where T is a list of strings containing each fact retrieved from the database.
     /// Else the type will be an <see cref="ErrorResult"/> of type <see cref="NotFoundErrorResult"/> if the collectionName does not exist in the database,
     /// or an <see cref="InternalErrorResult"/>
     /// </returns>
-    Task<Result> QueryAsync(string collectionName, float[] vector, ulong limit = 5, float minScore = (float)0.6);
+    Task<Result> QueryAsync(string collectionName, float[] vector);
 }

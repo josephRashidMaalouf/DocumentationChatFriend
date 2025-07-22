@@ -9,10 +9,12 @@ namespace DocumentationChatFriend.Backend.Infrastructure.Persistance.Qdrant;
 public class QDrantRepository : IVectorRepository
 {
     private readonly QdrantClient _client;
+    private readonly IVectorRepositoryConfigs _configs;
 
-    public QDrantRepository(QdrantClient client)
+    public QDrantRepository(QdrantClient client, IVectorRepositoryConfigs configs)
     {
         _client = client;
+        _configs = configs;
     }
 
     public async Task<Result> UpsertAsync(string collectionName, List<EmbeddedChunkModel> embeddedChunks)
@@ -60,8 +62,8 @@ public class QDrantRepository : IVectorRepository
         }
 
     }
-    //TODO: Make sure the limit and min score are configurable from the controller
-    public async Task<Result> QueryAsync(string collectionName, float[] vector, ulong limit = 5, float minScore = (float)0.7)
+
+    public async Task<Result> QueryAsync(string collectionName, float[] vector)
     {
         try
         {
@@ -75,10 +77,10 @@ public class QDrantRepository : IVectorRepository
             var result = await _client.QueryAsync(
                 collectionName: collectionName,
                 query: vector,
-                limit: limit);
+                limit: _configs.Limit);
 
             List<string> extractedPayload = result
-                .Where(x => x.Score >= minScore)
+                .Where(x => x.Score >= _configs.MinScore)
                 .Select(x => x.Payload["text"].StringValue)
                 .ToList();
 
