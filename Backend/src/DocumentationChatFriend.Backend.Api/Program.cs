@@ -1,4 +1,5 @@
 using DocumentationChatFriend.Backend.Api.Configs;
+using DocumentationChatFriend.Backend.Api.Setup;
 using DocumentationChatFriend.Backend.Application.Services;
 using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Infrastructure.Adapters;
@@ -34,6 +35,7 @@ builder.Services.AddScoped<IEmbeddingAdapter, NomicEmbeddingAdapter>();
 builder.Services.AddScoped<IRagService, RagService>();
 builder.Services.AddScoped<ITextUploadService, TextUploadService>();
 
+builder.Services.Configure<OllamaModelConfigs>(builder.Configuration.GetSection(OllamaModelConfigs.Name));
 
 var app = builder.Build();
 
@@ -46,6 +48,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+await app.UseOllama();
 
 app.MapControllers();
 

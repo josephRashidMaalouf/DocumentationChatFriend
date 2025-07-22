@@ -32,7 +32,7 @@ public class OllamaClient : IChatAdapter
     {
         try
         {
-            var prompt = _systemPrompt += question;
+            var prompt = _systemPrompt + question;
 
             var req = new OllamaGenerateRequest(
                 _config.Model,
