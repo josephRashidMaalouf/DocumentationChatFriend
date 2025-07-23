@@ -1,6 +1,5 @@
 ﻿using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Domain.Models;
-using Microsoft.Extensions.Logging;
 using Qdrant.Client;
 using Qdrant.Client.Grpc;
 using ResultPatternJoeget.Results;
@@ -11,13 +10,11 @@ public class QDrantRepository : IVectorRepository
 {
     private readonly QdrantClient _client;
     private readonly IVectorRepositoryConfigs _configs;
-    private readonly ILogger<QDrantRepository> _logger;
 
-    public QDrantRepository(QdrantClient client, IVectorRepositoryConfigs configs, ILogger<QDrantRepository> logger)
+    public QDrantRepository(QdrantClient client, IVectorRepositoryConfigs configs)
     {
         _client = client;
         _configs = configs;
-        _logger = logger;
     }
 
     public async Task<Result> UpsertAsync(string collectionName, List<EmbeddedChunkModel> embeddedChunks)
@@ -61,8 +58,8 @@ public class QDrantRepository : IVectorRepository
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message);
-            return new InternalErrorResult($"Could not perform an upsert to collection: {collectionName}");
+            return new InternalErrorResult($"Could not perform an upsert to collection: {collectionName}\n" +
+                                           $"Exception: {ex.Message}");
         }
 
     }
@@ -90,9 +87,10 @@ public class QDrantRepository : IVectorRepository
 
             return new SuccessResult<List<string>>(extractedPayload);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return new InternalErrorResult($"Could not query the collection: {collectionName} in the database");
+            return new InternalErrorResult($"Could not query the collection: {collectionName} in the database\n" +
+                                           $"Exception: {ex.Message}");
         }
     }
 }

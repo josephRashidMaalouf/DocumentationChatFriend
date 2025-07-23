@@ -21,15 +21,15 @@ services:
     ports:
       - "11434:11434"
     volumes:
-      - ollama_data:/root/.ollama        
+      - ollama_data:/root/.ollama/models
     pull_policy: always
 
   qdrant:
     image: qdrant/qdrant:latest
     container_name: "qdrant"
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "6333:6333"
+      - "6334:6334"
     volumes:
       - qdrant_data:/qdrant/storage
 
