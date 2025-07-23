@@ -1,4 +1,5 @@
 using DocumentationChatFriend.Backend.Api.Configs;
+using DocumentationChatFriend.Backend.Api.Helpers;
 using DocumentationChatFriend.Backend.Api.Setup;
 using DocumentationChatFriend.Backend.Application.Services;
 using DocumentationChatFriend.Backend.Domain.Interfaces;
@@ -10,6 +11,8 @@ using Qdrant.Client;
 
 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
+Console.WriteLine($"Environment: {env}");
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,12 +22,22 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 
-
-builder.Services.AddScoped<QdrantClient>(sp => new QdrantClient("localhost", 6334));
+var qDrantConfigSection = builder.Configuration.GetSection("QDrantConfigs");
+var qDrantHost = ConfigHelper.MustBeSet(
+    env == "Docker" ? qDrantConfigSection["Docker"] : qDrantConfigSection["Localhost"],
+    "QDrantConfigs:Hostname"
+);
+var qDrantPort = int.Parse(ConfigHelper.MustBeSet(qDrantConfigSection["Port"], "QDrantConfigs:Port"));
+builder.Services.AddScoped<QdrantClient>(sp => new QdrantClient(qDrantHost, qDrantPort));
 builder.Services.AddScoped<IVectorRepository, QDrantRepository>();
 
-//TODO: make sure the correct connectionstring is selected based on env
-builder.Services.AddTransient<IOllamaApiClient, OllamaApiClient>(sp => new OllamaApiClient("http://localhost:11434"));
+var ollamaSharpConnectionString = ConfigHelper.MustBeSet(
+    env == "Docker"
+        ? builder.Configuration.GetConnectionString("OllamaSharpDocker")
+        : builder.Configuration.GetConnectionString("OllamaSharpLocal"),
+    "ConnectionStrings:OllamaSharp"
+);
+builder.Services.AddTransient<IOllamaApiClient, OllamaApiClient>(sp => new OllamaApiClient(ollamaSharpConnectionString));
 
 builder.Services.AddHttpClient<IChatAdapter, OllamaClient>();
 
