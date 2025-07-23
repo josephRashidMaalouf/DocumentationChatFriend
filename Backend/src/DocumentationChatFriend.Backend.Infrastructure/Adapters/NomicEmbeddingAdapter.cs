@@ -1,5 +1,6 @@
 ﻿using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Domain.Models;
+using Microsoft.Extensions.Logging;
 using OllamaSharp;
 using ResultPatternJoeget.Results;
 
@@ -9,10 +10,12 @@ public class NomicEmbeddingAdapter : IEmbeddingAdapter
 {
     private readonly IOllamaApiClient _client;
     private const string ModelName = "nomic-embed-text";
+    private readonly ILogger<NomicEmbeddingAdapter> _logger;
 
-    public NomicEmbeddingAdapter(IOllamaApiClient client)
+    public NomicEmbeddingAdapter(IOllamaApiClient client, ILogger<NomicEmbeddingAdapter> logger)
     {
         _client = client;
+        _logger = logger;
         _client.SelectedModel = ModelName;
     }
 
@@ -27,8 +30,9 @@ public class NomicEmbeddingAdapter : IEmbeddingAdapter
                 Embedding = result.Embeddings[0].ToList()
             });
         }
-        catch(Exception)
+        catch(Exception ex)
         {
+            _logger.LogError(ex.Message);
             return new InternalErrorResult(
                 "Could not embed text: {text} because the OllamaApiClient could not be reached");
         }

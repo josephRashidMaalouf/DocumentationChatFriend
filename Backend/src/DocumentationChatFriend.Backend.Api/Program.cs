@@ -8,6 +8,7 @@ using DocumentationChatFriend.Backend.Infrastructure.Persistance.Qdrant;
 using DocumentationChatFriend.Backend.Infrastructure.TypedClients;
 using OllamaSharp;
 using Qdrant.Client;
+using Serilog;
 
 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
@@ -45,6 +46,14 @@ builder.Services.AddScoped<IRagService, RagService>();
 builder.Services.AddScoped<ITextUploadService, TextUploadService>();
 
 builder.Services.Configure<OllamaModelConfigs>(builder.Configuration.GetSection(OllamaModelConfigs.Name));
+
+
+builder.Services.AddSerilog(config =>
+{
+    config
+        .MinimumLevel.Information()
+        .WriteTo.Console();
+});
 
 var app = builder.Build();
 

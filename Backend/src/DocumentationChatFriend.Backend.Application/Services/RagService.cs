@@ -1,5 +1,6 @@
 ﻿using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Domain.Models;
+using Microsoft.Extensions.Logging;
 using ResultPatternJoeget.Results;
 
 namespace DocumentationChatFriend.Backend.Application.Services;
@@ -9,12 +10,14 @@ public class RagService : IRagService
     private readonly IEmbeddingAdapter _embedding;
     private readonly IChatAdapter _chatAdapter;
     private readonly IVectorRepository _vectorRepository;
+    private readonly ILogger<RagService> _logger;
 
-    public RagService(IEmbeddingAdapter embedding, IChatAdapter chatAdapter, IVectorRepository vectorRepository)
+    public RagService(IEmbeddingAdapter embedding, IChatAdapter chatAdapter, IVectorRepository vectorRepository, ILogger<RagService> logger)
     {
         _embedding = embedding;
         _chatAdapter = chatAdapter;
         _vectorRepository = vectorRepository;
+        _logger = logger;
     }
 
     public async Task<Result> AnswerQuestionAsync(string question, string collectionName)
@@ -44,6 +47,10 @@ public class RagService : IRagService
 
         if (answerResult is not SuccessResult<GenerationResponse> answerSuccess)
         {
+            if (answerResult is ErrorResult answerError)
+            {
+                _logger.LogError(answerError.Reason);
+            }
             return answerResult;
         }
 
