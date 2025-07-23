@@ -1,0 +1,31 @@
+services:
+  documentation-chat-friend-backend:
+    image: josephrashidmaalouf/documentation-chat-friend-backend:latest
+    container_name: "documentation-chat-friend-backend"
+    ports:
+      - "5143:5143"
+    environment:
+      - DOTNET_ENVIRONMENT=Docker
+    pull_policy: always
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: "ollama"
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/app           
+    pull_policy: always
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: "qdrant"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+volumes:
+  ollama_data:
+  qdrant_data:

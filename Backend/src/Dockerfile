@@ -18,4 +18,8 @@ COPY --from=build /app/publish .
 # Set environment to live
 ENV ASPNETCORE_ENVIRONMENT=Docker
 
+# Expose the required port
+EXPOSE 5143
+ENV ASPNETCORE_URLS=http://+:5143
+
 ENTRYPOINT ["dotnet", "DocumentationChatFriend.Backend.Api.dll"]

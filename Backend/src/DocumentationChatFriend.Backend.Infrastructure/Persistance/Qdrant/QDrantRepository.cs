@@ -56,7 +56,7 @@ public class QDrantRepository : IVectorRepository
 
             return new SuccessResult();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return new InternalErrorResult($"Could not perform an upsert to collection: {collectionName}");
         }
@@ -86,7 +86,7 @@ public class QDrantRepository : IVectorRepository
 
             return new SuccessResult<List<string>>(extractedPayload);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return new InternalErrorResult($"Could not query the collection: {collectionName} in the database");
         }

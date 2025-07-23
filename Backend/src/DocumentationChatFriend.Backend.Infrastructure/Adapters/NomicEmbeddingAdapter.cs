@@ -27,7 +27,7 @@ public class NomicEmbeddingAdapter : IEmbeddingAdapter
                 Embedding = result.Embeddings[0].ToList()
             });
         }
-        catch(Exception ex)
+        catch(Exception)
         {
             return new InternalErrorResult(
                 "Could not embed text: {text} because the OllamaApiClient could not be reached");
