@@ -39,13 +39,16 @@ I docker-compose filen ser det ut så här:
     pull_policy: always
 
 ```
-- OllamaClientConfigs__LLMModel=gemma3:1b 
+`- OllamaClientConfigs__LLMModel=gemma3:1b `
+
 På den raden kan du byta ut värdet till valfri lokal Ollama model. Men se då till att den laddas ned genom att lägga till en ny rad för Models:
+
 `- OllamaModelConfigs__Models__3=ny-model `
 Eller byta ut Models på index 0 till den modell du vill använda.
 
-- OllamaClientConfigs__EmbeddingModel=nomic-embed-text # This sets the embedding model to be used for formulating answer
-På samma sätt används denna rad för att välja embeding mode. Se till att embedding modellen du vill använda är satt i OllamaModelConfigs_Models arrayen.
+`- OllamaClientConfigs__EmbeddingModel=nomic-embed-text # This sets the embedding model to be used for formulating answer`
+
+På samma sätt används denna rad för att välja embeding model. Se till att embedding modellen du vill använda är satt i OllamaModelConfigs_Models arrayen.
 
 
 För en lista på Ollama modeller hänvisar jag till deras dokumentation: [https://ollama.com/library](https://ollama.com/library)
