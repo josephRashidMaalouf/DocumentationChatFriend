@@ -48,14 +48,12 @@ Eller byta ut Models på index 0 till den modell du vill använda.
 
 `- OllamaClientConfigs__EmbeddingModel=nomic-embed-text # This sets the embedding model to be used for formulating answer`
 
-På samma sätt används denna rad för att välja embeding model. Se till att embedding modellen du vill använda är satt i OllamaModelConfigs_Models arrayen.
+På samma sätt används denna rad för att välja embedding model. Se till att embedding modellen du vill använda är satt i OllamaModelConfigs_Models arrayen.
 
 
 För en lista på Ollama modeller hänvisar jag till deras dokumentation: [https://ollama.com/library](https://ollama.com/library)
 Se till att inte använda en starkare modell än vad din maskin klarar av. Tar modellen med än 100 sekunder på sig att formulera ett svar så kommer API:t inte svara.
 
-
-Här är teknikstack-sektionen i kopierbar `.md`-format:
 
 ## Teknikstack och arkitektur
 
