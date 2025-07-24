@@ -1,4 +1,4 @@
-﻿namespace DocumentationChatFriend.Backend.Domain.Interfaces;
+﻿namespace DocumentationChatFriend.Backend.Domain.Interfaces.Configs;
 
 public interface IVectorRepositoryConfigs
 {

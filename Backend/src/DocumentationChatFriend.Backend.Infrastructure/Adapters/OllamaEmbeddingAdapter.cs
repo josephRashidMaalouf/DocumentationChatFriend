@@ -1,19 +1,19 @@
 ﻿using DocumentationChatFriend.Backend.Domain.Interfaces;
+using DocumentationChatFriend.Backend.Domain.Interfaces.Configs;
 using DocumentationChatFriend.Backend.Domain.Models;
 using OllamaSharp;
 using ResultPatternJoeget.Results;
 
 namespace DocumentationChatFriend.Backend.Infrastructure.Adapters;
 
-public class NomicEmbeddingAdapter : IEmbeddingAdapter
+public class OllamaEmbeddingAdapter : IEmbeddingAdapter
 {
     private readonly IOllamaApiClient _client;
-    private const string ModelName = "nomic-embed-text";
 
-    public NomicEmbeddingAdapter(IOllamaApiClient client)
+    public OllamaEmbeddingAdapter(IOllamaApiClient client, IOllamaClientConfigs configs)
     {
         _client = client;
-        _client.SelectedModel = ModelName;
+        _client.SelectedModel = configs.EmbeddingModel;
     }
 
 

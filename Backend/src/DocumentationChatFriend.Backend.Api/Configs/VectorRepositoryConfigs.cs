@@ -1,5 +1,5 @@
 ﻿using DocumentationChatFriend.Backend.Api.Helpers;
-using DocumentationChatFriend.Backend.Domain.Interfaces;
+using DocumentationChatFriend.Backend.Domain.Interfaces.Configs;
 
 namespace DocumentationChatFriend.Backend.Api.Configs;
 

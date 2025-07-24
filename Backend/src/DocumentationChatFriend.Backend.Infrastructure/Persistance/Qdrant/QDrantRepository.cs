@@ -1,4 +1,5 @@
 ﻿using DocumentationChatFriend.Backend.Domain.Interfaces;
+using DocumentationChatFriend.Backend.Domain.Interfaces.Configs;
 using DocumentationChatFriend.Backend.Domain.Models;
 using Qdrant.Client;
 using Qdrant.Client.Grpc;
@@ -80,7 +81,7 @@ public class QDrantRepository : IVectorRepository
                 query: vector,
                 limit: _configs.Limit);
 
-            List<string> extractedPayload = result
+            var extractedPayload = result
                 .Where(x => x.Score >= _configs.MinScore)
                 .Select(x => x.Payload["text"].StringValue)
                 .ToList();
