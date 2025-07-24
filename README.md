@@ -2,7 +2,7 @@
 
 Ett lokalt RAG (Retrieval-Augmented Generation) API byggt med ASP.NET Core (.NET 9) och Clean Architecture. Allt du behöver är Docker – inga ytterligare beroenden eller konfigurationer krävs lokalt.
 
-## 🚀 Kom igång
+## Kom igång
 
 ### Förkrav
 - [Docker](https://www.docker.com/) installerat
