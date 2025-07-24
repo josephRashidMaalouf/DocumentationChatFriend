@@ -3,6 +3,7 @@ using DocumentationChatFriend.Backend.Api.Helpers;
 using DocumentationChatFriend.Backend.Api.Setup;
 using DocumentationChatFriend.Backend.Application.Services;
 using DocumentationChatFriend.Backend.Domain.Interfaces;
+using DocumentationChatFriend.Backend.Domain.Interfaces.Configs;
 using DocumentationChatFriend.Backend.Infrastructure.Adapters;
 using DocumentationChatFriend.Backend.Infrastructure.Persistance.Qdrant;
 using DocumentationChatFriend.Backend.Infrastructure.TypedClients;
@@ -41,7 +42,7 @@ builder.Services.AddHttpClient<IChatAdapter, OllamaClient>();
 builder.Services.AddTransient<IOllamaClientConfigs, OllamaClientConfigs>();
 builder.Services.AddTransient<IVectorRepositoryConfigs, VectorRepositoryConfigs>();
 
-builder.Services.AddScoped<IEmbeddingAdapter, NomicEmbeddingAdapter>();
+builder.Services.AddScoped<IEmbeddingAdapter, OllamaEmbeddingAdapter>();
 builder.Services.AddScoped<IRagService, RagService>();
 builder.Services.AddScoped<ITextUploadService, TextUploadService>();
 

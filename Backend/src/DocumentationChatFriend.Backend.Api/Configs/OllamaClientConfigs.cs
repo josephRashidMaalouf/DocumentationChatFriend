@@ -1,5 +1,5 @@
 ﻿using DocumentationChatFriend.Backend.Api.Helpers;
-using DocumentationChatFriend.Backend.Domain.Interfaces;
+using DocumentationChatFriend.Backend.Domain.Interfaces.Configs;
 
 namespace DocumentationChatFriend.Backend.Api.Configs;
 
@@ -10,7 +10,8 @@ public class OllamaClientConfigs : IOllamaClientConfigs
 
         var ollamaSection = _configuration.GetSection("OllamaClientConfigs");
 
-        Model = ConfigHelper.MustBeSet(ollamaSection["Model"], "OllamaConfigs:Model");
+        LLMModel = ConfigHelper.MustBeSet(ollamaSection["LLMModel"], "OllamaConfigs:LLMModel");
+        EmbeddingModel = ConfigHelper.MustBeSet(ollamaSection["EmbeddingModel"], "OllamaConfigs:EmbeddingModel");
         MaxTokens = int.Parse(ConfigHelper.MustBeSet(ollamaSection["MaxTokens"], "OllamaConfigs:MaxTokens"));
         Temperature = double.Parse(ConfigHelper.MustBeSet(ollamaSection["Temperature"], "OllamaConfigs:Temperature"));
 
@@ -25,7 +26,10 @@ public class OllamaClientConfigs : IOllamaClientConfigs
 
     }
 
-    public string Model { get; }
+    public string LLMModel { get; }
+
+    public string EmbeddingModel { get; }
+
     public Uri Uri { get; }
     public int MaxTokens { get; }
     public double Temperature { get; }

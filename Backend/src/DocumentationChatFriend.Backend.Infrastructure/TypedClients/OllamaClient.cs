@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 using DocumentationChatFriend.Backend.Domain.Interfaces;
+using DocumentationChatFriend.Backend.Domain.Interfaces.Configs;
 using DocumentationChatFriend.Backend.Domain.Models;
 using ResultPatternJoeget.Results;
 
@@ -35,7 +36,7 @@ public class OllamaClient : IChatAdapter
             var prompt = _systemPrompt + question;
 
             var req = new OllamaGenerateRequest(
-                _config.Model,
+                _config.LLMModel,
                 prompt,
                 _config.MaxTokens,
                 _config.Temperature);

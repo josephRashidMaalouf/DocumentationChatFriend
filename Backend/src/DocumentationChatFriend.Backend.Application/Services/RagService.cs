@@ -27,7 +27,7 @@ public class RagService : IRagService
         if (embeddingResult is not SuccessResult<EmbeddedResponse> embeddingSuccess)
         {
             var error = (embeddingResult as ErrorResult)?.Reason;
-            _logger.LogError(error);
+            _logger.LogError("EmbeddingError: {Error}", error);
             return embeddingResult;
         }
 
@@ -36,7 +36,7 @@ public class RagService : IRagService
         if (queryResult is not SuccessResult<List<string>> querySuccess)
         {
             var error = (queryResult as ErrorResult)?.Reason;
-            _logger.LogError(error);
+            _logger.LogError("Query error: {Error}", error);
             return queryResult;
         }
 
@@ -52,7 +52,7 @@ public class RagService : IRagService
         if (answerResult is not SuccessResult<GenerationResponse> answerSuccess)
         {
             var error = (answerResult as ErrorResult)?.Reason;
-            _logger.LogError(error);
+            _logger.LogError("Answer generation error: {Error}", error);
             return answerResult;
         }
 
