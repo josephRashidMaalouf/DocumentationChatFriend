@@ -30,7 +30,8 @@ I docker-compose filen ser det ut så här:
       - DOTNET_ENVIRONMENT=Docker
       - OllamaModelConfigs__Models__0=gemma3:1b 
       - OllamaModelConfigs__Models__1=nomic-embed-text:latest # This line, and the one above will make sure these models are pulled to the ollama container
-      - OllamaClientConfigs__Model=gemma3:1b # This sets the LLM to be used for formulating answers
+      - OllamaClientConfigs__LLMModel=gemma3:1b # This sets the LLM to be used for formulating answers
+      - OllamaClientConfigs__EmbeddingModel=nomic-embed-text # This sets the embedding model to be used for formulating answers
       - OllamaClientConfigs__MaxTokens=512 # Configure max tokens allowed in response
       - OllamaClientConfigs__Temperature=0.9 # Configure temperature (creativity) in responses. A lower number means less creative
       - VectorRepositoryConfigs__MinScore=0.7 # Configure the accuracy score on the embedding retrieved from the database in relation to the question asked
@@ -38,15 +39,18 @@ I docker-compose filen ser det ut så här:
     pull_policy: always
 
 ```
-- OllamaClientConfigs__Model=gemma3:1b 
+- OllamaClientConfigs__LLMModel=gemma3:1b 
 På den raden kan du byta ut värdet till valfri lokal Ollama model. Men se då till att den laddas ned genom att lägga till en ny rad för Models:
 `- OllamaModelConfigs__Models__3=ny-model `
 Eller byta ut Models på index 0 till den modell du vill använda.
 
+- OllamaClientConfigs__EmbeddingModel=nomic-embed-text # This sets the embedding model to be used for formulating answer
+På samma sätt används denna rad för att välja embeding mode. Se till att embedding modellen du vill använda är satt i OllamaModelConfigs_Models arrayen.
+
+
 För en lista på Ollama modeller hänvisar jag till deras dokumentation: [https://ollama.com/library](https://ollama.com/library)
 Se till att inte använda en starkare modell än vad din maskin klarar av. Tar modellen med än 100 sekunder på sig att formulera ett svar så kommer API:t inte svara.
 
-Just nu är embedding modellen inte konfigurerbar, men det kommer i nästa version.
 
 Här är teknikstack-sektionen i kopierbar `.md`-format:
 
