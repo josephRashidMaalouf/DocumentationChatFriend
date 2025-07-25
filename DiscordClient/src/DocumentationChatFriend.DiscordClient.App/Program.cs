@@ -16,14 +16,14 @@ builder.Services.Configure<DiscordOptions>(
 
 builder.Services.AddSingleton<DiscordSocketConfig>(sp => new DiscordSocketConfig()
 {
-    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
+    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent 
 });
 
 builder.Services.AddSingleton<DiscordSocketClient>();
 
 builder.Services.AddTransient<MessageHandler>();
 
-builder.Services.AddHttpClient<BackendClient>();
+builder.Services.AddHttpClient<IBackendClient, BackendClient>();
 
 builder.Services.AddHostedService<DiscordService>();
 var app  = builder.Build();

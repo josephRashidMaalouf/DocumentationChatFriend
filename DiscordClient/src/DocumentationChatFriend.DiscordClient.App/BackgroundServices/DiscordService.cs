@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using DocumentationChatFriend.DiscordClient.App.Configurations;
+using DocumentationChatFriend.DiscordClient.App.CustomResults;
 using DocumentationChatFriend.DiscordClient.App.Handlers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -27,10 +28,10 @@ public class DiscordService : BackgroundService
 
         _client.MessageReceived += ReadMessage;
 
-    await _client.LoginAsync(TokenType.Bot, _options.Value.Token);
-    await _client.StartAsync();
+        await _client.LoginAsync(TokenType.Bot, _options.Value.Token);
+        await _client.StartAsync();
 
-    await Task.Delay(Timeout.Infinite, stoppingToken);
+        await Task.Delay(Timeout.Infinite, stoppingToken);
     }
 
     private Task Log(LogMessage log)
@@ -51,15 +52,42 @@ public class DiscordService : BackgroundService
             return;
         }
 
-        if (message.Content.StartsWith("!"))
-        {
-            var result = await _messageHandler.Handle(message.Channel.Name, message.Content);
+        var content = await ExtractMessageContent(message);
 
-            if (!string.IsNullOrWhiteSpace(result))
+        var result = await _messageHandler.Handle(message.Channel.Name, content);
+
+        if (result is NoActionRequestedResult)
+        {
+            return;
+        }
+
+        if (result is SuccessResult<string> successResult)
+        {
+            await message.Channel.SendMessageAsync(successResult.Data);
+            return;
+        }
+
+        await message.Channel.SendMessageAsync(
+            "Something went wrong while processing your request. Try again, or tell Joe to fix me ASAP >:(");
+
+    }
+
+    private async Task<string> ExtractMessageContent(SocketMessage message)
+    {
+        var content = message.Content;
+
+        foreach (var a in message.Attachments)
+        {
+            if (a.Filename.EndsWith(".txt"))
             {
-                await message.Channel.SendMessageAsync(result);
+                using var httpClient = new HttpClient();
+                var stream = await httpClient.GetStreamAsync(a.Url);
+
+                var reader = new StreamReader(stream);
+                content += '\n' + await reader.ReadToEndAsync();
             }
         }
 
+        return content;
     }
 }

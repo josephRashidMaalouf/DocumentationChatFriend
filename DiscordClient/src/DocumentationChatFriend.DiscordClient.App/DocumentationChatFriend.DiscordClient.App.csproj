@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CustomResults\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

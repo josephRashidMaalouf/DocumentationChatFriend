@@ -1,6 +1,6 @@
 ﻿using ResultPatternJoeget.Results;
 
-namespace DocumentationChatFriend.DiscordClient.App.CustomErrors;
+namespace DocumentationChatFriend.DiscordClient.App.CustomResults;
 
 public class HttpErrorResult : ErrorResult
 {
