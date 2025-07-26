@@ -28,12 +28,14 @@ public class UploadStrategy : MessageStrategyBase
 
     public UploadOptions? ExtractOptions(string text)
     {
-        var optionals = text.Split("|||")[0].Split(':');
+        var optionals = text.Split("|||");
 
         if (optionals.Length == 1 && !int.TryParse(optionals[0], out _))
         {
             return null;
         }
+
+        optionals = optionals[0].Split(":");
 
         UploadOptions options = new UploadOptions();
         for (int i = 0; i < optionals.Length; i++)
