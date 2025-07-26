@@ -28,7 +28,7 @@ public class HelpStrategy : MessageStrategyBase
                                          
                                          You can specify how you want your text to be chunked before being embedded and stored:
                                          
-                                         !upload:int:int:int||| info-text | info.txt
+                                         !upload int:int:int||| info-text | info.txt
                                          
                                          The first parameter is the chunking style:
                                          - 0 = Sentence based
