@@ -15,8 +15,12 @@ public class UploadStrategy : MessageStrategyBase
     {
         var trimmedText = text.Replace("!upload", "").Trim();
 
+        var options = ExtractOptions(trimmedText);
 
-        
+        if (options is not null)
+        {
+            return await _client.UploadAsync(collectionName, trimmedText, options.ChunkingStyle ?? 1, options.ChunkLength ?? 100, options.Overlap ?? 30);
+        }
 
         return await _client.UploadAsync(collectionName, trimmedText);
 
@@ -26,15 +30,20 @@ public class UploadStrategy : MessageStrategyBase
     {
         var optionals = text.Split("|||")[0].Split(':');
 
-        if (!optionals.Any())
+        if (optionals.Length == 1 && !int.TryParse(optionals[0], out _))
         {
             return null;
         }
 
         UploadOptions options = new UploadOptions();
-        for (int i = 0; i < optionals.Length || (i > 2) == false; i++)
+        for (int i = 0; i < optionals.Length; i++)
         {
+            if (i > 2)
+            {
+                break;
+            }
             bool parsable = int.TryParse(optionals[i], out int value);
+            value = Math.Abs(value);
 
             if (!parsable)
             {
@@ -43,21 +52,17 @@ public class UploadStrategy : MessageStrategyBase
 
             if (i == 0)
             {
-                if (value > 2)
-                {
-                    value = 0;
-                }
-                options.ChunkingStyle = Math.Abs(value);
+                options.ChunkingStyle = value > 2 ? 0 : value; 
             }
 
             if (i == 1)
             {
-                options.ChunkLength = Math.Abs(value);
+                options.ChunkLength = value;
             }
 
             if (i == 2)
             {
-                options.Overlap = Math.Abs(value);
+                options.Overlap = value;
             }
         }
         return options;

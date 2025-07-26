@@ -28,14 +28,14 @@ public class BackendClient : IBackendClient
             ChunkingStyle = chunkingStyle
         };
 
-        var response = await _httpClient.PostAsJsonAsync($"api/upload?chunkLength={overlap}&overlap={overlap}", dto);
+        var response = await _httpClient.PostAsJsonAsync($"api/upload?chunkLength={chunkLength}&overlap={overlap}", dto);
 
         if (!response.IsSuccessStatusCode)
         {
             return new HttpErrorResult($"HttpErrorResult: {response.StatusCode}, {response.ReasonPhrase}");
         }
 
-        return new SuccessResult<string>("Your text was successfully uploaded.");
+        return new SuccessResult<string>("Your text is now being processed. This may take a few minutes. Thank you for your for being patient.");
     }
 
     public async Task<Result> QueryAsync(string collectionName, string question)

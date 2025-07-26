@@ -1,6 +1,8 @@
+using DocumentationChatFriend.Backend.Api.BackgroundServices;
 using DocumentationChatFriend.Backend.Api.Configs;
 using DocumentationChatFriend.Backend.Api.Helpers;
 using DocumentationChatFriend.Backend.Api.Setup;
+using DocumentationChatFriend.Backend.Application.Queues;
 using DocumentationChatFriend.Backend.Application.Services;
 using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Domain.Interfaces.Configs;
@@ -55,6 +57,10 @@ builder.Services.AddSerilog(config =>
         .MinimumLevel.Information()
         .WriteTo.Console();
 });
+
+
+builder.Services.AddSingleton<TextUploadQueue>();
+builder.Services.AddHostedService<TextUploader>();
 
 var app = builder.Build();
 

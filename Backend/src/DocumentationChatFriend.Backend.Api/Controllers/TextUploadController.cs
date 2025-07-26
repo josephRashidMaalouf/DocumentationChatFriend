@@ -1,6 +1,8 @@
 ﻿using DocumentationChatFriend.Backend.Application.Factories;
+using DocumentationChatFriend.Backend.Application.Queues;
 using DocumentationChatFriend.Backend.Domain.Enums;
 using DocumentationChatFriend.Backend.Domain.Interfaces;
+using DocumentationChatFriend.Backend.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using ResultPatternJoeget.Results;
 
@@ -10,11 +12,11 @@ namespace DocumentationChatFriend.Backend.Api.Controllers;
 [Route("api/upload")]
 public class TextUploadController : ControllerBase
 {
-    private readonly ITextUploadService _textUploadService;
+    private readonly TextUploadQueue _queue;
 
-    public TextUploadController(ITextUploadService textUploadService)
+    public TextUploadController(TextUploadQueue queue)
     {
-        _textUploadService = textUploadService;
+        _queue = queue;
     }
 
     [HttpPost]
@@ -33,12 +35,14 @@ public class TextUploadController : ControllerBase
             _ => throw new NotImplementedException()
         };
 
-        var result = await _textUploadService.UpsertAsync(dto.CollectionName, dto.Text, chunkService);
-
-        if (result is not SuccessResult success)
+        var job = new TextUploadJob()
         {
-            return StatusCode(503);
-        }
+            CollectionName = dto.CollectionName,
+            Text = dto.Text,
+            ChunkService = chunkService
+        };
+
+        await _queue.EnqueueAsync(job);
 
         return Ok();
     }
