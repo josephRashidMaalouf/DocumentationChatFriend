@@ -18,9 +18,9 @@ public class TextUploadService : ITextUploadService
         _logger = logger;
     }
 
-    public async Task<Result> UpsertAsync(string collectionName, string text, IChunkService chunkService)
+    public async Task<Result> UpsertAsync(TextUploadJob textUploadJob)
     {
-        var chunkedText = chunkService.Chunk(text);
+        var chunkedText = textUploadJob.ChunkService.Chunk(textUploadJob.Text);
 
         List<EmbeddedChunkModel> embeddedChunks = [];
         foreach (var chunk in chunkedText)
@@ -36,7 +36,7 @@ public class TextUploadService : ITextUploadService
             embeddedChunks.Add(new EmbeddedChunkModel(chunk, embedSuccess.Data.Embedding));
         }
 
-        var upsertResult = await _vectorRepository.UpsertAsync(collectionName, embeddedChunks);
+        var upsertResult = await _vectorRepository.UpsertAsync(textUploadJob.CollectionName, embeddedChunks);
         if (upsertResult is ErrorResult upsertError)
         {
             _logger.LogError("Upsert error: {Error}", upsertError.Reason);

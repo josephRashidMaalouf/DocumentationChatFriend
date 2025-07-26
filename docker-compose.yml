@@ -13,7 +13,7 @@ services:
       - OllamaClientConfigs__MaxTokens=512 # Configure max tokens allowed in response
       - OllamaClientConfigs__Temperature=0.9 # Configure temperature (creativity) in responses. A lower number means less creative
       - VectorRepositoryConfigs__MinScore=0.7 # Configure the accuracy score on the embedding retrieved from the database in relation to the question asked
-      - VectorRepositoryConfigs__Limit=3 # Configure maximum allowed embeddings to be retrieved from the database
+      - VectorRepositoryConfigs__Limit=5 # Configure maximum allowed embeddings to be retrieved from the database
     pull_policy: always
 
   ollama:
