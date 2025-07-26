@@ -73,6 +73,7 @@ namespace DocumentationChatFriend.DiscordClient.Tests
 
             Assert.Null(result);
         }
+        [Fact]
         public void ExtractOptions_OptionsWronglyProvided_NoEndMarker_ReturnsNull()
         {
             var text = "0:100:30 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
