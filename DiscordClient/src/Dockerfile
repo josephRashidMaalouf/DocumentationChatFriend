@@ -6,7 +6,7 @@ WORKDIR /src
 COPY . .
 
 # Restore and publish the main project
-WORKDIR /src/DocumentationChatFriend.DiscordClient.App.csproj
+WORKDIR /src/DocumentationChatFriend.DiscordClient.App
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish
 

@@ -16,12 +16,12 @@ public class DiscordService : BackgroundService
     private readonly MessageHandler _messageHandler;
     private readonly HttpClient _httpClient;
 
-    public DiscordService(DiscordSocketClient client, IOptions<DiscordOptions> options, MessageHandler messageHandler, IHttpClientFactory _httpClientFactory)
+    public DiscordService(DiscordSocketClient client, IOptions<DiscordOptions> options, MessageHandler messageHandler, IHttpClientFactory httpClientFactory)
     {
         _client = client;
         _options = options;
         _messageHandler = messageHandler;
-        _httpClient = _httpClientFactory.CreateClient();
+        _httpClient = httpClientFactory.CreateClient();
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
