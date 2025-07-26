@@ -14,12 +14,14 @@ public class DiscordService : BackgroundService
     private readonly DiscordSocketClient _client;
     private readonly IOptions<DiscordOptions> _options;
     private readonly MessageHandler _messageHandler;
+    private readonly HttpClient _httpClient;
 
-    public DiscordService(DiscordSocketClient client, IOptions<DiscordOptions> options, MessageHandler messageHandler)
+    public DiscordService(DiscordSocketClient client, IOptions<DiscordOptions> options, MessageHandler messageHandler, IHttpClientFactory _httpClientFactory)
     {
         _client = client;
         _options = options;
         _messageHandler = messageHandler;
+        _httpClient = _httpClientFactory.CreateClient();
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -80,8 +82,7 @@ public class DiscordService : BackgroundService
         {
             if (a.Filename.EndsWith(".txt"))
             {
-                using var httpClient = new HttpClient();
-                var stream = await httpClient.GetStreamAsync(a.Url);
+                var stream = await _httpClient.GetStreamAsync(a.Url);
 
                 var reader = new StreamReader(stream);
                 content += '\n' + await reader.ReadToEndAsync();

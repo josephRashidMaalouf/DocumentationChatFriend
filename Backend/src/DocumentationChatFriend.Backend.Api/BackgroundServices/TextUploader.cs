@@ -27,8 +27,25 @@ public class TextUploader : BackgroundService
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to process text upload: {collectionName}, {text}", job.CollectionName, job.Text.Substring(0, job.Text.Length / 10) + "[...]");
+                _logger.LogError(
+                    ex,
+                    "Failed to process text upload: {collectionName}, {text}",
+                    job.CollectionName,
+                    Truncate(job.Text, 50) + "[...]"
+                );
+
+
             }
         }
+    }
+
+    private string Truncate(string text, int maxChars)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return string.Empty;
+        }
+
+        return text.Length > maxChars ? text.Substring(0, maxChars) : text;
     }
 }
