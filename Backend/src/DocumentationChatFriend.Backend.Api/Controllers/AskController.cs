@@ -32,8 +32,25 @@ public class AskController : ControllerBase
             return StatusCode(503);
         }
 
+        if (result is NoFactsFoundResult)
+        {
+            return Ok("I don't have the facts to answer your question");
+        }
+
         return Ok(success.Data);
     }
+    [HttpPost]
+    [Route("answer/stream")]
+    public async IAsyncEnumerable<StreamAnswerDto> PostQuestion_GetStreamAnswer([FromBody] PostQuestionDto dto)
+    {
+        var responses = _ragService.StreamAnswerQuestionAsync(dto.Question, dto.CollectionName);
+
+        await foreach (var response in responses)
+        {
+            yield return new StreamAnswerDto(response.Response, response.Done);
+        }
+    }
+
     [HttpPost]
     [Route("facts")]
     public async Task<IActionResult> PostQuestions_GetFacts(
@@ -62,5 +79,6 @@ public class AskController : ControllerBase
     }
 }
 
+public record StreamAnswerDto(string Answer, bool Done);
 public record PostQuestionDto(string Question, string CollectionName);
 public record GetFactsDto(float Accuracy, string Fact);

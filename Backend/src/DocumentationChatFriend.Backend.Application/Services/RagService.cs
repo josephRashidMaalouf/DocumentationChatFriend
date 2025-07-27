@@ -23,32 +23,15 @@ public class RagService : IRagService
 
     public async Task<Result> AnswerQuestionAsync(string question, string collectionName)
     {
-        var embeddingResult = await _embedding.EmbedTextAsync(question);
 
-        if (embeddingResult is not SuccessResult<EmbeddedResponse> embeddingSuccess)
+        var getFactsResult = await GetFactsAsync(question, collectionName);
+
+        if (getFactsResult is not SuccessResult<string> facts)
         {
-            var error = (embeddingResult as ErrorResult)?.Reason;
-            _logger.LogError("EmbeddingError: {Error}", error);
-            return embeddingResult;
+            return getFactsResult;
         }
 
-        var queryResult = await _vectorRepository.QueryAsync(collectionName, embeddingSuccess.Data.Embedding.ToArray());
-
-        if (queryResult is not SuccessResult<List<string>> querySuccess)
-        {
-            var error = (queryResult as ErrorResult)?.Reason;
-            _logger.LogError("Query error: {Error}", error);
-            return queryResult;
-        }
-
-        if (!querySuccess.Data.Any())
-        {
-            return new SuccessResult<string>("I don't have the facts to answer your question.");
-        }
-
-        var facts = string.Join("\n\n\n-", querySuccess.Data);
-
-        var answerResult = await _chatAdapter.GenerateAsync($"Facts: {facts} \n\nQuestion: {question}");
+        var answerResult = await _chatAdapter.GenerateAsync($"Facts: {facts.Data} \n\nQuestion: {question}");
 
         if (answerResult is not SuccessResult<GenerationResponse> answerSuccess)
         {
@@ -58,6 +41,26 @@ public class RagService : IRagService
         }
 
         return new SuccessResult<string>(answerSuccess.Data.Response);
+    }
+
+    public async IAsyncEnumerable<StreamGenerationResponse> StreamAnswerQuestionAsync(string question, string collectionName)
+    {
+        var getFactsResult = await GetFactsAsync(question, collectionName);
+
+        if (getFactsResult is not SuccessResult<string> facts)
+        {
+            yield return new StreamGenerationResponse("I don't have the facts to answer your question", true);
+        }
+        else
+        {
+            var responses = _chatAdapter.GenerateStreamAsync($"Facts: {facts.Data} \n\nQuestion: {question}");
+
+            await foreach (var response in responses)
+            {
+                yield return response;
+            }
+        }
+
     }
 
     public async Task<Result> GetFactsAsync(string question, string collectionName, float minScore, ulong limit)
@@ -86,5 +89,35 @@ public class RagService : IRagService
         }
 
         return querySuccess;
+    }
+
+    private async Task<Result> GetFactsAsync(string question, string collectionName)
+    {
+        var embeddingResult = await _embedding.EmbedTextAsync(question);
+
+        if (embeddingResult is not SuccessResult<EmbeddedResponse> embeddingSuccess)
+        {
+            var error = (embeddingResult as ErrorResult)?.Reason;
+            _logger.LogError("EmbeddingError: {Error}", error);
+            return embeddingResult;
+        }
+
+        var queryResult = await _vectorRepository.QueryAsync(collectionName, embeddingSuccess.Data.Embedding.ToArray());
+
+        if (queryResult is not SuccessResult<List<string>> querySuccess)
+        {
+            var error = (queryResult as ErrorResult)?.Reason;
+            _logger.LogError("Query error: {Error}", error);
+            return queryResult;
+        }
+
+        if (!querySuccess.Data.Any())
+        {
+            return new NoFactsFoundResult();
+        }
+
+        var facts = string.Join("\n\n\n-", querySuccess.Data);
+
+        return new SuccessResult<string>(facts);
     }
 }

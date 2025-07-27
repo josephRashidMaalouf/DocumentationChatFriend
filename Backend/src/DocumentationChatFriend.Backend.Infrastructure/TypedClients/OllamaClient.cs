@@ -20,12 +20,12 @@ public class OllamaClient : IChatAdapter
         _httpClient.BaseAddress = config.Uri;
 
         _systemPrompt = """
-                                                You are a fact-based assistant.
-                                                You will be given a list of facts and a question.
-                                                Answer the question using only the provided facts.
-                                                Do not use external knowledge.
-                                                Remember that the person asking you will not be aware that you are provided with a list of facts."
-                                                """ + "\n\n";
+                        You are a fact-based assistant.
+                        You will be given a list of facts and a question.
+                        Answer the question using only the provided facts.
+                        Do not use external knowledge.
+                        Remember that the person asking you will not be aware that you are provided with a list of facts."
+                        """ + "\n\n";
     }
 
     public async Task<Result> GenerateAsync(string question)
@@ -72,11 +72,47 @@ public class OllamaClient : IChatAdapter
                 $"Something unexpected happened while trying to process the request to the Ollama API: {ex.Message}");
         }
     }
+
+    public async IAsyncEnumerable<StreamGenerationResponse> GenerateStreamAsync(string question)
+    {
+        var prompt = _systemPrompt + question;
+
+        var req = new OllamaGenerateRequest(
+            _config.LLMModel,
+            prompt,
+            _config.MaxTokens,
+            _config.Temperature,
+            true);
+
+        var result = await _httpClient.PostAsJsonAsync("generate", req);
+
+        var stream = await result.Content.ReadAsStreamAsync();
+        var streamReader = new StreamReader(stream);
+
+
+        string? line;
+        while ((line = await streamReader.ReadLineAsync()) != null)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+                continue;
+
+
+            var resp = JsonSerializer.Deserialize<StreamGenerationResponse>(line,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            if (resp != null)
+            {
+                yield return resp;
+            }
+
+        }
+
+    }
+
 }
 
 file record OllamaGenerateRequest(
-    string Model, 
-    string Prompt, 
-    int MaxTokens = 512, 
-    double Temperature = 0.9, 
+    string Model,
+    string Prompt,
+    int MaxTokens = 512,
+    double Temperature = 0.9,
     bool Stream = false);

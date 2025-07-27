@@ -14,4 +14,5 @@ public interface IChatAdapter
     /// result will be of type <see cref="InternalErrorResult"/>.
     /// </returns>
     Task<Result> GenerateAsync(string question);
+    IAsyncEnumerable<StreamGenerationResponse> GenerateStreamAsync(string question);
 }
