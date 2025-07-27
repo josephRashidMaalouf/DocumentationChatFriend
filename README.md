@@ -77,11 +77,11 @@ Se till att inte använda en starkare modell än vad din maskin klarar av. Tar m
 
 ## Planerade features
 
-[x] Konfigurerbar embedding modell
-[] Endpoint för chatt med kontext/minne
-[] Streaming av svar från LLM
-[] Möjlighet att läsa in `.txt` och `.pdf`-filer direkt
-[] Frontend-gränssnitt
+- [x] Konfigurerbar embedding modell
+- [] Endpoint för chatt med kontext/minne
+- [] Streaming av svar från LLM
+- [] Möjlighet att läsa in `.txt` och `.pdf`-filer direkt
+- [] Frontend-gränssnitt
 
 # API Documentation
 
