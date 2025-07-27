@@ -8,7 +8,8 @@ services:
       - DOTNET_ENVIRONMENT=Docker
       - OllamaModelConfigs__Models__0=gemma3:1b 
       - OllamaModelConfigs__Models__1=nomic-embed-text:latest # This line, and the one above will make sure these models are pulled to the ollama container
-      - OllamaClientConfigs__LLMModel=gemma3:1b # This sets the LLM to be used for formulating answers
+      - OllamaModelConfigs__Models__2=gemma:2b # This line, and the one above will make sure these models are pulled to the ollama container
+      - OllamaClientConfigs__LLMModel=gemma:2b # This sets the LLM to be used for formulating answers
       - OllamaClientConfigs__EmbeddingModel=nomic-embed-text # This sets the embedding model to be used for formulating answers
       - OllamaClientConfigs__MaxTokens=512 # Configure max tokens allowed in response
       - OllamaClientConfigs__Temperature=0.9 # Configure temperature (creativity) in responses. A lower number means less creative

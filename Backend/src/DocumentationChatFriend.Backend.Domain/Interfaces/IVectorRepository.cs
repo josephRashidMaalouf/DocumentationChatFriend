@@ -42,4 +42,6 @@ public interface IVectorRepository
     /// or an <see cref="InternalErrorResult"/>
     /// </returns>
     Task<Result> QueryForScoredFactsAsync(string collectionName, float[] vector, ulong limit, float minScore);
+
+    Task<Result> GetCollectionNamesAsync();
 }

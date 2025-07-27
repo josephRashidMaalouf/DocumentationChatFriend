@@ -1,0 +1,42 @@
+﻿@page "/"
+@using DocumentationChatFriend.Frontend.Blazor.TypedClients
+@using ResultPatternJoeget.Results
+@inject IBackendClient BackendClient
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@if (!string.IsNullOrWhiteSpace(error))
+{
+    <b>Error: @error</b>
+}
+
+@foreach (var name in collectionNames)
+{
+    <p>@name</p>
+}
+
+@code
+{
+    string error = "";
+    List<string> collectionNames = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await BackendClient.GetCollectionNamesAsync();
+
+        if (result is SuccessResult<List<string>> successResult)
+        {
+            collectionNames.AddRange(successResult.Data.ToArray());
+        }
+
+        if (result is ErrorResult errorResult)
+        {
+            error = errorResult.Reason;
+        }
+        await base.OnInitializedAsync();
+    }
+}

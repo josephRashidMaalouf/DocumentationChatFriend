@@ -124,4 +124,18 @@ public class QDrantRepository : IVectorRepository
                                            $"Exception: {ex.Message}");
         }
     }
+
+    public async Task<Result> GetCollectionNamesAsync()
+    {
+        try
+        {
+            var collections = await _client.ListCollectionsAsync();
+
+            return new SuccessResult<List<string>>(collections.ToList());
+        }
+        catch (Exception ex)
+        {
+            return new InternalErrorResult(ex.Message);
+        }
+    }
 }

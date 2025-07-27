@@ -38,18 +38,17 @@ var ollamaSharpConnectionString = ConfigHelper.MustBeSet(
     "ConnectionStrings:OllamaSharp"
 );
 builder.Services.AddTransient<IOllamaApiClient, OllamaApiClient>(sp => new OllamaApiClient(ollamaSharpConnectionString));
-
-builder.Services.AddHttpClient<IChatAdapter, OllamaClient>();
-
 builder.Services.AddTransient<IOllamaClientConfigs, OllamaClientConfigs>();
 builder.Services.AddTransient<IVectorRepositoryConfigs, VectorRepositoryConfigs>();
+
+builder.Services.AddHttpClient<IChatAdapter, OllamaClient>();
 
 builder.Services.AddScoped<IEmbeddingAdapter, OllamaEmbeddingAdapter>();
 builder.Services.AddScoped<IRagService, RagService>();
 builder.Services.AddScoped<ITextUploadService, TextUploadService>();
+builder.Services.AddScoped<ICollectionManagementService, CollectionManagementService>();
 
 builder.Services.Configure<OllamaModelConfigs>(builder.Configuration.GetSection(OllamaModelConfigs.Name));
-
 
 builder.Services.AddSerilog(config =>
 {
@@ -62,6 +61,21 @@ builder.Services.AddSerilog(config =>
 builder.Services.AddSingleton<TextUploadQueue>();
 builder.Services.AddHostedService<TextUploader>();
 
+
+builder.Services.AddCors(x =>
+{
+    x.AddPolicy("allow-frontend", pb =>
+    {
+        var allowedOrigins =
+            ConfigHelper.MustBeSet<string[]>(builder.Configuration.GetSection("AllowedOrigins").Get<string[]>(),
+                "AllowedOrigins");
+        pb.AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins(allowedOrigins);
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,7 +84,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("allow-frontend");
 
 app.UseAuthorization();
 
