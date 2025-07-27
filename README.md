@@ -87,9 +87,11 @@ Se till att inte använda en starkare modell än vad din maskin klarar av. Tar m
 
 ## Endpoints
 
-### POST `/api/completions`
+### POST `/api/ask`
 
-Submit a question to the RAG (Retrieval-Augmented Generation) service and receive a generated answer.
+Submit a question to the RAG (Retrieval-Augmented Generation) service.
+
+### api/ask/answer
 
 **Request Body**
 
@@ -106,9 +108,32 @@ Submit a question to the RAG (Retrieval-Augmented Generation) service and receiv
 **Responses**
 
 - `200 OK`: Returns the generated answer as a string.
-- `404 Not Found`: The specified collection or data was not found.
+- `404 Not Found`: The specified collection was not found.
 - `503 Service Unavailable`: The service is temporarily unavailable or an error occurred.
 
+### api/ask/facts
+
+**Request Body**
+
+```
+{
+    "question" : "string",
+    "collectionName" : "string"
+}
+```
+
+- `question` (string, required): The question to be answered.
+- `collectionName` (string, required): The name of the collection to query facts from.
+
+**Optional query parameters**
+- `minScore`(float, optional, default: 0.7) describes the minimum accuracy score of the facts retrieved in relation to the question
+- `limit`(ulong, optional, default: 3) maximum amount of facts to be retrieved
+
+**Responses**
+
+- `200 OK`: Returns a List<(float, string)> where the float is the accuracy score of the fact, and the string is the fact.
+- `404 Not Found`: The specified collection was not found.
+- `503 Service Unavailable`: The service is temporarily unavailable or an error occurred.
 ---
 
 ### POST `/api/upload`
@@ -138,7 +163,6 @@ Will only be used with the Custom (2) chunkingStyle
 
 **Responses**
 
-- `200 OK`: Upload and chunking succeeded.
-- `503 Service Unavailable`: The service is temporarily unavailable or an error occurred.
+- `200 OK`: The data is being processed and stored by the server. Might take a few minutes until the job is done, depending on the size of the data
 
 ---
