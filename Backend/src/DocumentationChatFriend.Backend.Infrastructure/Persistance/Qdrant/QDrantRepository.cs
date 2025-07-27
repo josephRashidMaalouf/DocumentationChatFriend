@@ -94,4 +94,34 @@ public class QDrantRepository : IVectorRepository
                                            $"Exception: {ex.Message}");
         }
     }
+
+    public async Task<Result> QueryForScoredFactsAsync(string collectionName, float[] vector, ulong limit, float minScore)
+    {
+        try
+        {
+            var collectionExists = await _client.CollectionExistsAsync(collectionName);
+            if (!collectionExists)
+            {
+                return new NotFoundErrorResult($"No collection with the name {collectionName} exists in the database");
+            }
+
+
+            var result = await _client.QueryAsync(
+                collectionName: collectionName,
+                query: vector,
+                limit: limit);
+
+            var extractedPayload = result
+                .Where(x => x.Score >= minScore)
+                .Select(x => (x.Score, x.Payload["text"].StringValue))
+                .ToList();
+
+            return new SuccessResult<List<(float score, string fact)>>(extractedPayload);
+        }
+        catch (Exception ex)
+        {
+            return new InternalErrorResult($"Could not query the collection: {collectionName} in the database\n" +
+                                           $"Exception: {ex.Message}");
+        }
+    }
 }

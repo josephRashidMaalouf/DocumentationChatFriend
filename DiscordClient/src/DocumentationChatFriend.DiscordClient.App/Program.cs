@@ -13,15 +13,12 @@ builder.Configuration.AddUserSecrets<Program>();
 builder.Services.Configure<DiscordOptions>(
     builder.Configuration.GetSection(DiscordOptions.Name));
 
-builder.Services.AddSingleton<DiscordSocketClient>(sp =>
+builder.Services.AddSingleton<DiscordSocketConfig>(sp => new DiscordSocketConfig()
 {
-    var config = new DiscordSocketConfig
-    {
-        GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
-    };
-
-    return new DiscordSocketClient(config);
+    GatewayIntents = GatewayIntents.GuildMessages | GatewayIntents.Guilds | GatewayIntents.MessageContent
 });
+
+builder.Services.AddSingleton<DiscordSocketClient>();
 
 
 builder.Services.AddTransient<MessageHandler>();

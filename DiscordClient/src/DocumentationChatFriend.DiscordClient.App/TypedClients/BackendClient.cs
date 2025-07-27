@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using DocumentationChatFriend.DiscordClient.App.CustomResults;
 using DocumentationChatFriend.DiscordClient.App.Helpers;
 using Microsoft.Extensions.Configuration;
@@ -46,7 +45,7 @@ public class BackendClient : IBackendClient
             CollectionName = collectionName
         };
 
-        var response = await _httpClient.PostAsJsonAsync("api/completions", dto);
+        var response = await _httpClient.PostAsJsonAsync("api/ask", dto);
 
         if (!response.IsSuccessStatusCode)
         {
