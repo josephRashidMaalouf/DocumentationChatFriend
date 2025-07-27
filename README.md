@@ -110,6 +110,31 @@ Submit a question to the RAG (Retrieval-Augmented Generation) service.
 - `200 OK`: Returns the generated answer as a string.
 - `404 Not Found`: The specified collection was not found.
 - `503 Service Unavailable`: The service is temporarily unavailable or an error occurred.
+- 
+#### api/ask/answer/stream
+
+**Request Body**
+
+```
+{
+    "question" : "string",
+    "collectionName" : "string"
+}
+```
+
+- `question` (string, required): The question to be answered.
+- `collectionName` (string, required): The name of the collection to query facts from.
+
+**Responses**
+
+- `200 OK`: Returns the generated answer as an IAsyncEnumerable where each answer object looks like this:
+```
+{
+  "answer": string,
+  "done" : bool
+}
+```
+The done property indicates if the answer is still being streamed or not.
 
 ### api/ask/facts
 
