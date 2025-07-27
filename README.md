@@ -131,9 +131,19 @@ Submit a question to the RAG (Retrieval-Augmented Generation) service.
 
 **Responses**
 
-- `200 OK`: Returns a List<(float, string)> where the float is the accuracy score of the fact, and the string is the fact.
+- `200 OK`: Returns a a list of facts.
 - `404 Not Found`: The specified collection was not found.
 - `503 Service Unavailable`: The service is temporarily unavailable or an error occurred.
+
+Response body:
+```
+[
+    {
+        "accuracy": float,
+        "fact": string
+    }
+]
+```
 ---
 
 ### POST `/api/upload`
