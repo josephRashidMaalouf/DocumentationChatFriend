@@ -111,7 +111,7 @@ Submit a question to the RAG (Retrieval-Augmented Generation) service.
 - `404 Not Found`: The specified collection was not found.
 - `503 Service Unavailable`: The service is temporarily unavailable or an error occurred.
 - 
-#### api/ask/answer/stream
+### api/ask/answer/stream
 
 **Request Body**
 
