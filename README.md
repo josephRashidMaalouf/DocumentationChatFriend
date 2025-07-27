@@ -68,7 +68,7 @@ Se till att inte använda en starkare modell än vad din maskin klarar av. Tar m
 * Två endpoints:
 
   * `POST /api/upload` för att ladda in och embeda text
-  * `POST /api/completions` för att ställa frågor och få svar baserat på embedda data
+  * `POST /api/ask` för att ställa frågor och få svar baserat på embedda data
 * Använder Ollama embedding modeller (default: `nomic-embed-text`)
 * Lagrar embeddingar i Qdrant
 * Använder Ollama LLM (default: `gemma3:1b`) för att generera svar baserat på relevant fakta
@@ -77,11 +77,11 @@ Se till att inte använda en starkare modell än vad din maskin klarar av. Tar m
 
 ## Planerade features
 
-* Konfigurerbar embedding modell
-* Endpoint för chatt med kontext/minne
-* Streaming av svar från LLM
-* Möjlighet att läsa in `.txt` och `.pdf`-filer direkt
-* Frontend-gränssnitt
+[x] Konfigurerbar embedding modell
+[] Endpoint för chatt med kontext/minne
+[] Streaming av svar från LLM
+[] Möjlighet att läsa in `.txt` och `.pdf`-filer direkt
+[] Frontend-gränssnitt
 
 # API Documentation
 
