@@ -1,4 +1,5 @@
-﻿using DocumentationChatFriend.Backend.Domain.Interfaces;
+﻿using DocumentationChatFriend.Backend.Domain.CustomResults;
+using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Domain.Models;
 using Microsoft.Extensions.Logging;
 using ResultPatternJoeget.Results;
@@ -57,5 +58,33 @@ public class RagService : IRagService
         }
 
         return new SuccessResult<string>(answerSuccess.Data.Response);
+    }
+
+    public async Task<Result> GetFactsAsync(string question, string collectionName, float minScore, ulong limit)
+    {
+        var embeddingResult = await _embedding.EmbedTextAsync(question);
+
+        if (embeddingResult is not SuccessResult<EmbeddedResponse> embeddingSuccess)
+        {
+            var error = (embeddingResult as ErrorResult)?.Reason;
+            _logger.LogError("EmbeddingError: {Error}", error);
+            return embeddingResult;
+        }
+
+        var queryResult = await _vectorRepository.QueryForScoredFactsAsync(collectionName, embeddingSuccess.Data.Embedding.ToArray(), limit, minScore);
+
+        if (queryResult is not SuccessResult<List<(float, string)>> querySuccess)
+        {
+            var error = (queryResult as ErrorResult)?.Reason;
+            _logger.LogError("Query error: {Error}", error);
+            return queryResult;
+        }
+
+        if (!querySuccess.Data.Any())
+        {
+            return new NoFactsFoundResult();
+        }
+
+        return querySuccess;
     }
 }

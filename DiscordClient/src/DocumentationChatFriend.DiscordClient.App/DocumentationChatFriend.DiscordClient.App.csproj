@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UserSecretsId>e5bb4e1e-ac10-41d3-99bc-a6dc1ef7ee2a</UserSecretsId>
+	<InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +19,8 @@
     <PackageReference Include="results.joeget" Version="2.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
+  
+	<ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

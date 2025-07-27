@@ -14,4 +14,5 @@ public interface IRagService
     /// result will be of type <see cref="NotFoundErrorResult"/> if the collectionName does not exist in the database. Else it will be an <see cref="InternalErrorResult"/>.
     /// </returns>
     Task<Result> AnswerQuestionAsync(string  question, string collectionName);
+    Task<Result> GetFactsAsync(string  question, string collectionName, float minScore, ulong limit);
 }

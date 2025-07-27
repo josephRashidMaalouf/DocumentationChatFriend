@@ -1,10 +1,8 @@
 ﻿using DocumentationChatFriend.Backend.Application.Factories;
 using DocumentationChatFriend.Backend.Application.Queues;
 using DocumentationChatFriend.Backend.Domain.Enums;
-using DocumentationChatFriend.Backend.Domain.Interfaces;
 using DocumentationChatFriend.Backend.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using ResultPatternJoeget.Results;
 
 namespace DocumentationChatFriend.Backend.Api.Controllers;
 
