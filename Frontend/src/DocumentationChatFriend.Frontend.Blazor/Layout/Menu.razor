@@ -1,0 +1,52 @@
+﻿
+
+@inject IBackendClient BackendClient
+
+<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
+    <div class="container-fluid">
+        <a class="navbar-brand" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+            <span class="navbar-toggler-icon"></span>
+        </a>
+        </div>
+</nav>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div>
+            Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+        </div>
+        @if (!string.IsNullOrWhiteSpace(error))
+        {
+            <b>Error: @error</b>
+        }
+
+        @foreach (var name in collectionNames)
+        {
+            <p>@name</p>
+        }
+    </div>
+</div>
+@code {
+    string error = "";
+    List<string> collectionNames = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await BackendClient.GetCollectionNamesAsync();
+
+        if (result is SuccessResult<List<string>> successResult)
+        {
+            collectionNames.AddRange(successResult.Data.ToArray());
+        }
+
+        if (result is ErrorResult errorResult)
+        {
+            error = errorResult.Reason;
+        }
+        await base.OnInitializedAsync();
+    }
+}
